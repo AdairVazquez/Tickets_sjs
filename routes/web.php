@@ -8,9 +8,26 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+
+
+// RUTAS ADMIN
+Route::view('dashboardAdministrador', 'admin.dashboard')
+    ->middleware(['auth', 'verified', 'rol.admin'])
+    ->name('admin.dashboard');
+
+Route::view('usuarios', 'admin.usuarios')
+    ->middleware(['auth', 'verified', 'rol.admin'])
+    ->name('usuarios');
+
+Route::view('tickets', 'admin.tickets')
+    ->middleware(['auth', 'verified', 'rol.admin'])
+    ->name('tickets');
+
+
+
+
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
