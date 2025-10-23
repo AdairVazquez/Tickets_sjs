@@ -23,6 +23,10 @@ Route::view('tickets', 'admin.tickets')
     ->middleware(['auth', 'verified', 'rol.admin'])
     ->name('tickets');
 
+Route::view('nuevoTicket', 'cliente.nuevoTicket')
+    ->middleware(['auth', 'verified', 'rol.admin'])
+    ->name('nuevoTicket');
+
 
 
 
