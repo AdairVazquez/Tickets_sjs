@@ -55,7 +55,6 @@
                                 </tr>
                             @endforeach
 
-                            <!-- Más filas -->
                         </tbody>
                     </table>
                 </div>
