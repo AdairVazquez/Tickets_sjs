@@ -22,16 +22,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-  // Tu configuración de Firebase
- const firebaseConfig = {
-    apiKey: "AIzaSyD8ASypj2828Isg8pt-FmmdHsDFX1XxUgE",
-    authDomain: "tickets-sjs.firebaseapp.com",
-    databaseURL: "https://tickets-sjs-default-rtdb.firebaseio.com/",
-    projectId: "tickets-sjs",
-    storageBucket: "tickets-sjs.firebasestorage.app",
-    messagingSenderId: "357550086903",
-    appId: "1:357550086903:web:fc4d9f2233ccf91daf11f2"
-  };
+ 
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
