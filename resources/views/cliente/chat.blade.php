@@ -11,7 +11,7 @@
     <h2>Chat en tiempo real</h2>
 
     <div id="mensajes" style="height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;"></div>
-
+ 
     <div class="mt-3">
         <input type="text" id="mensaje" placeholder="Escribe un mensaje..." class="form-control mb-2">
         <button id="enviar" class="btn btn-primary">Enviar</button>
