@@ -23,7 +23,17 @@ class Ticket extends Model
 
       public function creador()
     {
-        return $this->belongsTo(User::class, 'id_usuario_creador');
+        return $this->belongsTo(User::class, 'id_usuario_creador'); 
+    }
+
+    public function archivo()
+    {
+        return $this->belongsTo(Archivo::class, 'id_archivo');
+    }
+
+    public function archivoRespuesta()
+    {
+        return $this->belongsTo(Archivo::class, 'id_archivo_respuesta');
     }
 
     // Relación con el usuario al que se asignó el ticket

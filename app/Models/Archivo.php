@@ -6,11 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Archivo extends Model
 {
-    const CREATED_AT = 'creado_en';
-    const UPDATED_AT = 'actualizado_en';   
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';   
 
     protected $fillable = [
         'ruta',
         'tipo'
     ];
-}
+
+    public function ticket()
+    {
+        return $this->hasOne(Ticket::class, 'id_archivo');
+    }
+} 
