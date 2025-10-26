@@ -59,20 +59,65 @@
                                     colspan="9">
                                     Hurra!! No hay ningun ticket abierto!! 🎉</td>
                             @else
-                                <table>
-                                    @foreach ($ticketsAbiertos as $ticket)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                                        {{ $ticket->id }} </td>
+                                @foreach ($ticketsAbiertos as $ticket)
+                                    <tr>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticket->id }} </td>
 
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                                        {{ $ticket->subcategoria }} </td>
-                                        </tr>
-                                    @endforeach
-                                </table>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticket->subcategoria->nombre }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticket->titulo }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticket->prioridad->nivel }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticket->estado->nombre_estado }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticket->creado_en }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticket->creador->name }} </td>
+
+                                        @if ($ticket->asignado === null)
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                <form wire:submit.prevent="asignarUsuario" class="space-y-4">
+                                                    <input type="hidden" wire:model="Ticket_id"
+                                                        value="{{ $ticket->id }}">
+                                                    <select wire:model="id_usuarioA.{{ $ticket->id }}"
+                                                        wire:change="asignarUsuario({{ $ticket->id }})"
+                                                        class="mt-1 block w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-100">
+                                                        <option value="">Asignar a...</option>
+                                                        @foreach ($usuariosA as $ua)
+                                                            <option value="{{ $ua->id }}">{{ $ua->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </form>
+                                            </td>
+                                        @endif
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                                wire:click="irADetalles({{ $ticket->id }})">Ver
+                                                detalles
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             @endif
-
-
                         </tbody>
                     </table>
                 </div>
@@ -134,22 +179,55 @@
                                     colspan="9">
                                     Hurra!! No hay ningun ticket en proceso!! 🎉</td>
                             @else
-                                <table>
-                                    @foreach ($ticketsProceso as $ticketP)
-                                        <tr>
-                                            <td>{{ $ticketP->id }}</td>
-                                            <td>{{ $ticketP->titulo }}</td> 
-                                        </tr>
-                                    @endforeach
-                                </table>
+                                @foreach ($ticketsProceso as $ticketP)
+                                    <tr>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticketP->id }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticketP->subcategoria->nombre }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticketP->titulo }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticketP->prioridad->nivel }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticketP->estado->nombre_estado }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticketP->creado_en }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticketP->creador->name }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            {{ $ticketP->asignado->name }} </td>
+
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                            <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                                wire:click="irADetalles({{ $ticketP->id }})">Ver
+                                                detalles
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             @endif
-
-
                         </tbody>
                     </table>
                 </div>
 
-                
+
                 <div class="flex mt-5">
                     <h1 class="text-2xl font-bold mb-3 ml-1">TICKETS CERRADOS</h1>
                 </div>
@@ -206,21 +284,72 @@
                                     colspan="9">
                                     Hurra!! No hay ningun ticket Cerrado!! 🎉</td>
                             @else
-                                <table>
                                     @foreach ($ticketsCerrados as $ticketC)
                                         <tr>
-                                            <td>{{ $ticketC->id }}</td>
-                                            <td>{{ $ticketC->titulo }}</td> 
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {{ $ticketC->id }} </td>
+
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {{ $ticketC->subcategoria->nombre }} </td>
+
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {{ $ticketC->titulo }} </td>
+
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {{ $ticketC->prioridad->nivel }} </td>
+
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {{ $ticketC->estado->nombre_estado }} </td>
+
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {{ $ticketC->creado_en }} </td>
+
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {{ $ticketC->creador->name }} </td>
+
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                {{ $ticketC->asignado->name }} </td>
+
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                <button
+                                                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                                    wire:click="irADetalles({{ $ticketC->id }})">Ver
+                                                    detalles
+                                                </button>
+                                            </td>
                                         </tr>
                                     @endforeach
-                                </table>
                             @endif
-
-
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+
+    @livewireScripts
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        window.addEventListener('ticketAsignado', () => {
+            Swal.fire({
+                toast: true, // Activar estilo toast
+                position: 'top-end', // Arriba derecha
+                icon: 'success', // Icono de éxito
+                title: 'Ticket asignado', // Texto
+                showConfirmButton: false, // Sin botón de OK
+                timer: 3000, // Duración 3 segundos
+                timerProgressBar: true // Barra de progreso
+            });
+        });
+    </script>
 </div>

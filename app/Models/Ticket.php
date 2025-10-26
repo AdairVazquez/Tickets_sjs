@@ -36,6 +36,21 @@ class Ticket extends Model
         return $this->belongsTo(Archivo::class, 'id_archivo_respuesta');
     }
 
+    public function subcategoria()
+    {
+        return $this->belongsTo(subcategoria::class, 'id_subcategoria');
+    }
+
+    public function prioridad()
+    {
+        return $this->belongsTo(prioridad::class, 'id_prioridad');
+    }
+
+    public function estado()
+    {
+        return $this->belongsTo(estado::class, 'id_estado');
+    }
+
     // Relación con el usuario al que se asignó el ticket
     public function asignado()
     {

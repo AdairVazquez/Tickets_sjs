@@ -9,7 +9,8 @@
                 <form wire:submit.prevent="save" enctype="multipart/form-data" class="space-y-4">
                     <!-- Titulo -->
                     <div>
-                        <label for="titulo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Titulo</label>
+                        <label for="titulo"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Titulo</label>
                         <input type="text" id="titulo" wire:model="titulo"
                             class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-100">
                         @error('titulo')
@@ -21,8 +22,7 @@
                     <div>
                         <label for="descripcion"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Descripción</label>
-                        <input type="text" id="descripcion" wire:model="descripcion"
-                            class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-100">
+                        <textarea id="descripcion" wire:model="descripcion" cols="30" rows="2" class="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-100"></textarea>
                         @error('descripcion')
                             <span class="text-red-600 text-sm">{{ $message }}</span>
                         @enderror
@@ -61,25 +61,73 @@
                     </div>
 
                     <!-- Archivo adjunto -->
-                    <div>
-                        <label for="archivo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Archivo
-                            adjunto</label>
-                        <input type="file" id="archivo" wire:model="archivo"
+                    <div x-data="{ cargando: false }">
+                        <label for="archivo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Archivo adjunto
+                        </label>
+
+                        <input type="file" id="archivo" wire:model="archivo" @change="cargando = true"
                             class="mt-1 block w-full text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800">
 
                         @error('archivo')
                             <span class="text-red-600 text-sm">{{ $message }}</span>
                         @enderror
 
-                        <!-- Vista previa si es una imagen -->
-                        @if ($archivo)
-                            <div class="mt-2">
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Vista previa:</span>
-                                <img src="{{ $archivo->temporaryUrl() }}"
-                                    class="mt-1 w-32 h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-700">
-                            </div>
-                        @endif
+                        <!-- Vista previa del archivo -->
+                        <div class="mt-2">
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Vista previa:</span>
+
+                            @if ($archivo)
+                                <!-- Mensaje mientras se carga -->
+                                <div wire:loading wire:target="archivo" x-show="cargando"
+                                    class="mt-2 flex items-center gap-2 text-blue-600 dark:text-blue-400 text-sm animate-pulse">
+                                    <svg class="w-5 h-5 animate-spin text-blue-500" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                            stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z">
+                                        </path>
+                                    </svg>
+                                    Cargando vista previa...
+                                </div>
+
+                                @php
+                                    $mime = $archivo->getMimeType();
+                                    $isImage = str_starts_with($mime, 'image/');
+                                @endphp
+
+                                <div wire:loading.remove wire:target="archivo" class="mt-2">
+                                    @if ($isImage)
+                                        <!-- Si es una imagen -->
+                                        <img src="{{ $archivo->temporaryUrl() }}" alt="Vista previa"
+                                            @load="cargando = false"
+                                            class="rounded-lg border border-gray-300 dark:border-gray-700 max-w-full h-auto object-contain shadow-sm transition-opacity duration-300" />
+                                    @else
+                                        <!-- Si no es una imagen -->
+                                        <div class="flex flex-col items-center justify-center w-64 h-40 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shadow-sm transition-opacity duration-300"
+                                            x-init="cargando = false">
+                                            <svg class="w-10 h-10 text-gray-400 dark:text-gray-500 mb-2"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 8h10M7 12h10m-9 4h9m2 0a2 2 0 002-2V8a2 2 0 00-2-2h-5.586a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 008.586 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12z" />
+                                            </svg>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400 text-center px-2">
+                                                Vista previa no disponible para este tipo de archivo.
+                                            </p>
+                                            <span class="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                                                {{ $archivo->getClientOriginalName() }}
+                                            </span>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
                     </div>
+
+
+
 
                     <!-- Botones -->
                     <div class="flex justify-end gap-3 mt-6">
@@ -97,4 +145,21 @@
             </div>
         </div>
     </div>
+
+    @livewireScripts
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        window.addEventListener('ticketCreado', () => {
+            Swal.fire({
+                toast: true, // Activar estilo toast
+                position: 'top-end', // Arriba derecha
+                icon: 'success', // Icono de éxito
+                title: 'Ticket creado, espera actualizaciones del equipo de soporte', // Texto
+                showConfirmButton: false, // Sin botón de OK
+                timer: 3000, // Duración 3 segundos
+                timerProgressBar: true // Barra de progreso
+            });
+        });
+    </script>
 </div>

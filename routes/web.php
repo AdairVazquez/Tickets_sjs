@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Soporte\DetalleTicket;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
@@ -8,6 +9,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('/chat', function () {
+    return view('cliente.chat');
+})->name('home');
 
 
 // RUTAS ADMIN
@@ -20,16 +24,16 @@ Route::view('usuarios', 'admin.usuarios')
     ->name('usuarios');
 
 Route::view('tickets', 'admin.tickets')
-    ->middleware(['auth', 'verified', 'rol.admin'])
+    ->middleware(['auth', 'verified'])
     ->name('tickets');
 
 Route::view('nuevoTicket', 'cliente.nuevoTicket')
-    ->middleware(['auth', 'verified', 'rol.admin'])
+    ->middleware(['auth', 'verified'])
     ->name('nuevoTicket');
 
-
-
-
+Route::get('/detalleTicket/{ticketId}', DetalleTicket::class)
+    ->middleware(['auth', 'verified'])
+    ->name('detalleTicket');
 
 
 
