@@ -39,8 +39,8 @@ class DetalleTicket extends Component
         $this->dispatch('ticketCerrado');
     }
 
-    public function irChat(){
-
+    public function irChat($ticketId){
+        return redirect()->route('chat', ['ticketId' => $ticketId]);
     }
 
     public function mount($ticketId)

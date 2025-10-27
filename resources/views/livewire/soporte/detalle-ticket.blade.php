@@ -84,9 +84,9 @@
                                         <button wire:click="confirmCerrar({{ $ticket->id }})"
                                             class="mt-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Cerrar
                                             Ticket</button>
-                                        <button wire:click="irChat"
-                                        class="mt-1 ml-3 px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">Ir
-                                        al chat</button>
+                                        <button class="px-4 ml-3 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
+                                                wire:click="irChat({{ $ticket->id }})">Ir al chat
+                                            </button>
                                     @endif
 
                                     

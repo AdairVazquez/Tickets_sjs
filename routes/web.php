@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Chat;
 use App\Livewire\Soporte\DetalleTicket;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -34,6 +35,10 @@ Route::view('nuevoTicket', 'cliente.nuevoTicket')
 Route::get('/detalleTicket/{ticketId}', DetalleTicket::class)
     ->middleware(['auth', 'verified'])
     ->name('detalleTicket');
+
+Route::get('/chatTicket/{ticketId}', Chat::class)
+    ->middleware(['auth', 'verified'])
+    ->name('chat');
 
 
 
