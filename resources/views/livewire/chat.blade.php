@@ -34,12 +34,29 @@
                 push,
                 onChildAdded,
                 serverTimestamp,
-                query, 
+                query,
                 orderByChild,
                 equalTo
             } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-            // aqui van las credenciales firebase
+            const firebaseConfig = {
+
+                apiKey: "AIzaSyD8ASypj2828Isg8pt-FmmdHsDFX1XxUgE",
+
+                authDomain: "tickets-sjs.firebaseapp.com",
+
+                databaseURL: "https://tickets-sjs-default-rtdb.firebaseio.com",
+
+                projectId: "tickets-sjs",
+
+                storageBucket: "tickets-sjs.firebasestorage.app",
+
+                messagingSenderId: "357550086903",
+
+                appId: "1:357550086903:web:fc4d9f2233ccf91daf11f2"
+
+            };
+
 
 
             const app = initializeApp(firebaseConfig);
@@ -49,7 +66,7 @@
             const ticketQuery = query(chatRef, orderByChild('ticketId'), equalTo(ticketId));
 
 
-            
+
             const rol = '{{ $rol }}'
             const nombre = '{{ $nombre_usuario }}'
             const concatenado = nombre + ' | ' + rol
@@ -63,9 +80,6 @@
             const hora = now.getHours().toString().padStart(2, '0');
             const minuto = now.getMinutes().toString().padStart(2, '0');
             const horaFormateada = `${hora}:${minuto}`;
-
-
-            console.log(horaFormateada);
 
 
             document.addEventListener("DOMContentLoaded", function() {
@@ -85,29 +99,40 @@
                 const msg = data.val();
                 const div = document.createElement('div');
 
-                // Si el mensaje NO es tuyo y fue creado después de cargar la página
-                if (idUsuario != msg.emisor_id && msg.timestamp > inicioChat) {
-                    div.innerHTML = `
-                        <div class="flex items-start">
-                            <div class="max-w-xs bg-gray-700 text-white p-3 rounded-2xl rounded-bl-none shadow">
-                                <span class="block text-xs text-gray-200 text-right mt-1">${msg.datos}</span>
-                                <p>${msg.mensaje}</p>
-                                <span class="block text-xs text-gray-400 text-right mt-1">${msg.hora}</span>
+                if (idUsuario != msg.emisor_id) {
+                    
+                    if (msg.timestamp > inicioChat) {
+                        div.innerHTML = `
+                            <div class="flex items-start">
+                                <div class="max-w-xs bg-gray-700 text-white p-3 rounded-2xl rounded-bl-none shadow">
+                                    <span class="block text-xs text-gray-200 text-right mt-1">${msg.datos}</span>
+                                    <p>${msg.mensaje}</p>
+                                    <span class="block text-xs text-gray-400 text-right mt-1">${msg.hora}</span>
+                                </div>
                             </div>
-                        </div>
-                    `;
-
-                    mostrarNotificacion('Nuevo mensaje', msg.mensaje);
-                } else if (idUsuario == msg.emisor_id || msg.timestamp <= inicioChat) {
-                    div.innerHTML = `
-                        <div class="flex items-start justify-end">
-                            <div class="max-w-xs bg-blue-600 text-white p-3 rounded-2xl rounded-br-none shadow">
-                                <span class="block text-xs text-gray-200 text-right mt-1">${msg.datos}</span>
-                                <p>${msg.mensaje}</p>
-                                <span class="block text-xs text-gray-200 text-right mt-1">${msg.hora}</span>
+                        `;
+                        mostrarNotificacion('Nuevo mensaje', msg.mensaje);
+                    } else {
+                        div.innerHTML = `
+                            <div class="flex items-start">
+                                <div class="max-w-xs bg-gray-700 text-white p-3 rounded-2xl rounded-bl-none shadow">
+                                    <span class="block text-xs text-gray-200 text-right mt-1">${msg.datos}</span>
+                                    <p>${msg.mensaje}</p>
+                                    <span class="block text-xs text-gray-400 text-right mt-1">${msg.hora}</span>
+                                </div>
                             </div>
+                        `;
+                    }
+                } else {
+                    div.innerHTML = `
+                    <div class="flex items-start justify-end">
+                        <div class="max-w-xs bg-blue-600 text-white p-3 rounded-2xl rounded-br-none shadow">
+                            <span class="block text-xs text-gray-200 text-right mt-1">${msg.datos}</span>
+                            <p>${msg.mensaje}</p>
+                            <span class="block text-xs text-gray-200 text-right mt-1">${msg.hora}</span>
                         </div>
-                    `;
+                    </div>
+                `;
                 }
 
                 mensajesDiv.appendChild(div);
@@ -118,7 +143,7 @@
                 if (Notification.permission === "granted") {
                     new Notification(titulo, {
                         body: cuerpo,
-                        
+
                     });
                 }
             }
@@ -148,6 +173,7 @@
                     push(chatRef, {
                         emisor_id: {{ Auth::id() }},
                         mensaje: mensaje,
+                        timestamp: Date.now(),
                         hora: horaFormateada,
                         datos: concatenado,
                         ticketId: ticketId
